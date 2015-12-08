@@ -7,34 +7,32 @@ output: html_document
 
 ## Overview
 ***
-Crime Pattern Detection is one of the many applications of data mining, and it
-deals with the study and analysis of crimes using data. As you might think, 
-detecting a pattern, or even worse, predicting them is something that might seem 
-taken from a movie. However it is a real application of data mining, and there 
+Crime Pattern Detection is one of the many applications of data mining; it
+deals with the study, analysis and understanding of crimes through discovery of pattern
+or other significative insight in data. As you might think, 
+detecting a pattern of criminal activity, or even predicting them is something that might seem 
+taken from a movie. However, it is a real application of data mining, and there 
 are many research groups working on that.
 
 In this report I will introduce the concept of time series analysis using the R base
-package to inspect the assassination history of Puerto Rico from 2007 to 2014.
+package, to inspect the assassination history of Puerto Rico from 2007 to 2014.
 
 ## The data
 ***
 
-This report's dataset features the total amount of murders that happened in Puerto
+This report's dataset features the total amount of murders perpetrated in Puerto
 Rico during the period 2007 - 2014. This data is divided by months and years. 
 
 Let's take a look at it.
 
 
-```{r, echo=FALSE}
+```{r}
 pr_crime_table <- read.csv("~/Desktop/pr_crime_table.csv", row.names = 1)
 print(pr_crime_table)
 ```
 
-The first row of the dataset are the months, and the first column is the year.
-For example, on January 2007 there were 66 registered assassinations.
-
-Note: the `row.names = 1` instruction is needed to use the first column of the 
-dataset as the name of the rows, which in this case are the years.
+The first row of the dataset (the header) are the months, and the first column (row names)
+represent the year. For example, on January 2007 there were 66 registered assassinations.
 
 The data used was obtained from the _Instituto de Estadisticas de Puerto Rico_
 (or Statistics Institute of Puerto Rico) website.  
@@ -42,12 +40,11 @@ The data used was obtained from the _Instituto de Estadisticas de Puerto Rico_
 ## The analysis
 ***
 
-Now that we have seen how the data is, let's commence the analysis and build
-the time series model. The model is built using a vector of the values to analyze
-(the crimes), by specifying the frequency or time interval, which in this case 
-is 12 since we are using monthly data, and by setting the start date (January 2007).
-
-The name of this model
+Now that we have seen how the data is, let's commence the analysis by building
+the time series model. To build the model we need a vector of the values to
+be analyzed (the frequency of crimes), and the time interval, seen as `frequency`
+on the code, which is 12 since we are using monthly data, and lastly we need
+to state the start data (January 2007).
 
 ```{r, echo=FALSE}
 # Transform the table into a vector; ts should just take a vector, it performs
@@ -55,22 +52,22 @@ The name of this model
 ts.model <- ts(c(t(pr_crime_table)), frequency = 12, start = c(2007, 1))
 ```
 
-Once the model is built, the next step is to decompose the time series. It will
-be decompose into seasonal, trend and irregular components using moving averages - 
-a calculation that shows the average value of a subset over a period of time.
+Once the model is built, the next step is to decompose it into several components.
+These components are: seasonal, trend and irregular. In the next section, I will
+explain these concepts in detail.
+
+To decompose the data into the previously mentioned elements, I applied a technique
+named moving averages - a calculation that shows the average value of
+a subset over a period of time.
 
 ```{r}
 decomposition.ma <- decompose(ts.model)
 names(decomposition.ma)
 ```
 
-The previous line showed the components of this `decomposed` object. As it was
-previously mentioned, our objective was to decomposed the time series into a 
+The previous output shows the components of this `decomposed` object. As it was
+previously mentioned, our objective was to decompose the time series into a 
 seasonal, trend and irregular (named `random` in the object) component.
-
-In the following sections I will be presenting and explaining each one of these 
-components.
-
 
 ### The seasonal trend
 ***
@@ -84,14 +81,14 @@ axis(1, at=1:12, labels=months.names, las=2)
 ```
 
 
-The previous plot is the seasonal trend of the data. It shows the trend of murders
-of one year based on the seven years of data.
-On the x-axis we have the months of the year, and on the y-axis the difference of 
-the crimes from the average. For example, suppose that the average number of 
-murders is 20, then the average during March would be 15 (20 - 15), because 
-the March average is -5.
+The past plot is the seasonal trend of the data. What you see in the figure is the
+generalized trend of the crime activity during a year, based on seven years of crime.
+The x-axis represent the months of the year, and the y-axis shows the difference between 
+the number of crimes, and the global average number of crimes. For example, 
+suppose that the average number of murders in a month is 20, then the average during March 
+would be 15 (20 - 15), because the March average is -5.
 
-The plow shows that during the period February - April, the crimes seems to decrease
+The plot shows that during the period February - April, the amount of crimes decreases
 until it reaches a global minima at -13.5. Then, on the following month, May, the
 average number of murders increase by 19. Thus, we have the less active month,
 and the most active back to back. From April until the end of the year, the crime
@@ -111,12 +108,14 @@ The trend decomposition is the trend of the murders across the complete dataset.
 plot(decomposition.ma$trend)
 ```
 
-We can on this plot that the assassinations increases until it reaches a maximum
+We can see on this plot that the assassinations increases until it reaches a maximum
 point during mid-2011, meaning that 2011 was the year with the most assassinations.
-After that year the number decrease. The following present the total murders
-per year, and they seem to keep the pattern shown in the plot. Both extremes of
-the table, 2007 and 2014, have the smaller amount of crimes, while 2011 have the
-most, 1136.
+After that year the number decline. 
+
+The following table presents the total murders per year. If we compare those numbers
+with the plot, we can notice that it follows the pattern presented on the previous
+image. From 2007 until 2011, the frequency of murders
+increment up to 2011 (this is the peak on the plot). Afterwards, from 2011 until 2014 the recurrence of homicides slows down.
 
 ```{r}
 apply(pr_crime_table, 1, function(x) sum(x))
@@ -125,8 +124,10 @@ apply(pr_crime_table, 1, function(x) sum(x))
 ## Decomposition plot
 
 For the last section of the report, I will present a summary of the decomposition
-using a plot that shows the the previous two figures, in addition to the original
-values and the random or remainder decomposition.
+using a visualization that has the previous two figures, plus a plot of the entire
+original dataset, and the random or remainder decomposition. Each value of the
+remainder component is the difference between the original value from the seasonal
+plus trend fit.
 
 ```{r}
 plot(decomposition.ma)
@@ -136,8 +137,7 @@ The first plot is the original values. If we compare it to the second one, the t
 we can notice that it follows the same structure, a peak at mid-2011 and
 smaller values at the extremes. The third plot, the seasonal decomposition, is the
 same seasonal trend plot presented before, but repeated for all the years. Finally,
-the random plot is the remainder decomposition. The value of each point of this
-attribute is the difference between the original values from the seasonal plus trend fit.
+the random plot is the remainder decomposition.
 
 ### Closure
 ***
@@ -145,7 +145,8 @@ attribute is the difference between the original values from the seasonal plus t
 In this report, I presented the basics of a time series analysis using the base R
 package, and an application of it using crime data from Puerto Rico. The results
 found indicates that there is a trend of crimes that takes place during a year;
-during the first three months they decrease, followed by an increase in April,
-which then decreases. Moreover, the general trend of the data is that from 2008
-up until 2011, the number of crimes increased at a slow pace, and after mid-2011
-it decreased.
+during the first three months the homicide activity declines, followed by an 
+increase in April, where it hits its maximum value, and subsequently it decreases 
+and continues an almost similar behaviour until the end of the year. Moreover, 
+the general trend of the data is that from 2008 up until 2011, the number of crimes
+increased at a slow pace, and after mid-2011 it decreased.
