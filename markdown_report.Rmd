@@ -36,8 +36,8 @@ For example, on January 2007 there were 66 registered assassinations.
 Note: the `row.names = 1` instruction is needed to use the first column of the 
 dataset as the name of the rows, which in this case are the years.
 
-The data used was obtained from the _Instituto de Estadisticas de Puerto Rico_
-(or Statistics Institute of Puerto Rico) website.  
+The data was obtained from the [_Instituto de Estadisticas de Puerto Rico_](http://www.estadisticas.gobierno.pr/iepr/)
+(Statistics Institute of Puerto Rico).
 
 ## The analysis
 ***
@@ -108,7 +108,8 @@ print(decomposition.ma$figure)
 The trend decomposition is the trend of the murders across the complete dataset.
 
 ```{r}
-plot(decomposition.ma$trend)
+plot(decomposition.ma$trend, xlab = 'Year', ylab = 'Number of assassinations',
+     main = 'Trend of assassinations in Puerto Rico during 2007 - 2014')
 ```
 
 We can on this plot that the assassinations increases until it reaches a maximum
