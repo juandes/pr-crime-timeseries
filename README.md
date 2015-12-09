@@ -2,14 +2,15 @@
 
 ## Overview
 
-Crime Pattern Detection is one of the many applications of data mining, and it
-deals with the study and analysis of crimes using data. As you might think, 
-detecting a pattern, or even worse, predicting them is something that might seem 
-taken from a movie. However it is a real application of data mining, and there 
+Crime Pattern Detection is one of the many applications of data mining; it
+deals with the study, analysis and understanding of crimes through discovery of pattern
+or other significative insight in data. As you might think, 
+detecting a pattern of criminal activity, or even predicting them is something that might seem 
+taken from a movie. However, it is a real application of data mining, and there 
 are many research groups working on that.
 
 In this report I will introduce the concept of time series analysis using the R base
-package to inspect the assassination history of Puerto Rico from 2007 to 2014.
+package, to inspect the assassination history of Puerto Rico from 2007 to 2014.
 
 ## The data
 
