@@ -95,7 +95,7 @@ print(pr_crime_table)</code></pre>
 <div id="the-analysis" class="section level2">
 <h2>The analysis</h2>
 <hr />
-<p>Now that we have seen how the data is, let’s commence the analysis by building the time series model. To build the model we need a vector of the values to be analyzed (the frequency of crimes), and the time interval, seen as <code>frequency</code> on the code, which is 12 since we are using monthly data, and lastly we need to state the start data (January 2007).</p>
+<p>Now that we have seen how the data is, let’s commence the analysis by building the time series model. To build the model we need a vector of the values to be analyzed (the frequency of crimes), and the time interval, seen as <code>frequency</code> on the code, which is 12 since we are using monthly data, and lastly we need to state the starting period (January 2007).</p>
 <pre class="r"><code># Transform the table into a vector; ts should just take a vector, it performs
 # the split into times by itself
 ts.model &lt;- ts(c(t(pr_crime_table)), frequency = 12, start = c(2007, 1))</code></pre>
